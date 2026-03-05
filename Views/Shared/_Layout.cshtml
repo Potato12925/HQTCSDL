@@ -1,4 +1,9 @@
-﻿<!DOCTYPE html>
+﻿@{
+    var server = Context.Session.GetString("Server");
+    var database = Context.Session.GetString("Database");
+    var username = Context.Session.GetString("Username");
+}
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -21,21 +26,43 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                        <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Data" asp-action="Query">query</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Data" asp-action="Report">report</a>
                         </li>
+                        <li class="nav-item ms-auto">
+                            <form asp-controller="Database" asp-action="Connect" method="post" class="d-flex gap-2">
+
+                                <input name="Server" class="form-control form-control-sm"
+                                       value="@server" placeholder="Server">
+
+                                <input name="Database" class="form-control form-control-sm"
+                                       value="@database" placeholder="Database">
+
+                                <input name="Username" class="form-control form-control-sm"
+                                       value="@username" placeholder="Username">
+
+                                <input name="Password" type="password"
+                                       class="form-control form-control-sm"
+                                       placeholder="Password" />
+
+                                <button type="submit" class="btn btn-sm btn-primary">
+                                    Connect
+                                </button>
+
+                            </form>
+                        </li>
                     </ul>
                 </div>
             </div>
         </nav>
+        @if (TempData["Message"] != null)
+        {
+            <div id="tempMessage" class="alert alert-info">
+                @TempData["Message"]
+            </div>
+        }
     </header>
     <div class="container">
         <main role="main" class="pb-3">
@@ -43,14 +70,17 @@
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2026 - HQTCSDL - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
+<script>
+    setTimeout(function () {
+        var msg = document.getElementById("tempMessage");
+        if (msg) {
+            msg.style.display = "none";
+        }
+    }, 3000); 
+</script>
